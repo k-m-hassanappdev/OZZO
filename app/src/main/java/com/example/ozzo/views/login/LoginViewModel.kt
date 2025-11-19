@@ -1,0 +1,34 @@
+package com.example.ozzo.views.login
+
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.example.ozzo.core.DataState
+import com.example.ozzo.data.models.userLogin
+import com.example.ozzo.data.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val authService: AuthRepository
+) : ViewModel() {
+
+    private val _loginResponse= MutableLiveData<DataState<userLogin>>()
+    val loginResponse : LiveData<DataState<userLogin>> =_loginResponse
+    fun userLogin(userLogin: userLogin){
+        _loginResponse.postValue(DataState.Loading())
+
+
+
+        authService.userLogin(userLogin).addOnSuccessListener {
+            _loginResponse.postValue(DataState.Success(userLogin))
+            Log.d("TAG", "userLogin: Success ")
+
+        }.addOnFailureListener {
+            _loginResponse.postValue(DataState.Error("${it.message}"))
+            Log.d("TAG", "userLogin:${it.message} ")
+        }
+    }
+}
