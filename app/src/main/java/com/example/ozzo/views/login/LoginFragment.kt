@@ -1,5 +1,6 @@
 package com.example.ozzo.views.login
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -9,6 +10,7 @@ import com.example.ozzo.core.DataState
 import com.example.ozzo.data.models.UserLogin
 import com.example.ozzo.databinding.FragmentLoginBinding
 import com.example.ozzo.isEmpty
+import com.example.ozzo.views.dashboard.seller.SellerDashboard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.getValue
 
@@ -50,9 +52,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
                 is DataState.Success<*> -> {
                     loading.dismiss()
-                    Toast.makeText(context, "Login Successful:${it.data}", Toast.LENGTH_SHORT)
-                        .show()
-                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+                    Toast.makeText(context, "Login Successful:${it.data}", Toast.LENGTH_SHORT).show()
+
+                    startActivity(Intent(requireContext(), SellerDashboard::class.java))
+                    requireActivity().finish()
                 }
 
 
