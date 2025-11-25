@@ -1,23 +1,28 @@
 package com.example.ozzo.views.dashboard
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.ozzo.R
+import com.example.ozzo.base.BaseFragment
+import com.example.ozzo.databinding.FragmentDashboardBinding
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class DashboardFragment : Fragment() {
+class DashboardFragment : BaseFragment<FragmentDashboardBinding>(FragmentDashboardBinding::inflate) {
+    @Inject
+    lateinit var jAuth: FirebaseAuth
+    override fun setListener() {
+        with(binding){
+            btnLogout.setOnClickListener {
+                jAuth.signOut()
+                findNavController().navigate(R.id.action_dashboardFragment_to_startFragment)
+            }
+        }
+    }
 
+    override fun allObserver() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
 

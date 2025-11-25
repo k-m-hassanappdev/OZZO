@@ -6,44 +6,36 @@ import androidx.navigation.fragment.findNavController
 import com.example.ozzo.R
 import com.example.ozzo.base.BaseFragment
 import com.example.ozzo.core.DataState
-import com.example.ozzo.data.models.userLogin
+import com.example.ozzo.data.models.UserLogin
 import com.example.ozzo.databinding.FragmentLoginBinding
 import com.example.ozzo.isEmpty
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.getValue
+
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
 
     private val viewModel: LoginViewModel by viewModels()
 
     override fun setListener() {
-
         with(binding){
+            btnRegister.setOnClickListener {
+                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+            }
             btnLogin.setOnClickListener {
                 etEmail.isEmpty()
                 etPassword.isEmpty()
                 if (!etEmail.isEmpty() && !etPassword.isEmpty()){
-                    Toast.makeText(context, "All input done...", Toast.LENGTH_LONG).show()
-
-                    val user = userLogin(
-                        etEmail.text.toString(),
-                        etPassword.text.toString()
-                    )
-
+//                    Toast.makeText(context, "All input done...", Toast.LENGTH_LONG).show()
+                    val user = UserLogin(etEmail.text.toString(), etPassword.text.toString())
                     viewModel.userLogin(user)
-
-
+                    loading.show()
                 }
             }
         }
     }
 
     override fun allObserver() {
-        loginResponse()
-    }
-
-    private fun loginResponse() {
-
         viewModel.loginResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is DataState.Error<*> -> {

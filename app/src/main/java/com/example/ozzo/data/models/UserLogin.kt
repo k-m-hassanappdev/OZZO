@@ -1,6 +1,6 @@
 package com.example.ozzo.data.models
 
-data class userLogin(
+data class UserLogin(
     val email: String,
     val password: String
 )

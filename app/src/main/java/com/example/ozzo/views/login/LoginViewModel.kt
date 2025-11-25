@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.ozzo.core.DataState
-import com.example.ozzo.data.models.userLogin
+import com.example.ozzo.data.models.UserLogin
 import com.example.ozzo.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,9 +15,9 @@ class LoginViewModel @Inject constructor(
     private val authService: AuthRepository
 ) : ViewModel() {
 
-    private val _loginResponse= MutableLiveData<DataState<userLogin>>()
-    val loginResponse : LiveData<DataState<userLogin>> =_loginResponse
-    fun userLogin(userLogin: userLogin){
+    private val _loginResponse= MutableLiveData<DataState<UserLogin>>()
+    val loginResponse : LiveData<DataState<UserLogin>> =_loginResponse
+    fun userLogin(userLogin: UserLogin){
         _loginResponse.postValue(DataState.Loading())
 
 
@@ -26,9 +26,9 @@ class LoginViewModel @Inject constructor(
             _loginResponse.postValue(DataState.Success(userLogin))
             Log.d("TAG", "userLogin: Success ")
 
-        }.addOnFailureListener {
-            _loginResponse.postValue(DataState.Error("${it.message}"))
-            Log.d("TAG", "userLogin:${it.message} ")
+        }.addOnFailureListener {error->
+            _loginResponse.postValue(DataState.Error("${error.message}"))
+            Log.d("TAG", "userLogin:${error.message} ")
         }
     }
 }

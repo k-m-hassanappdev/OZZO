@@ -20,10 +20,25 @@ class RegistrationViewModel @Inject constructor(
 
     fun userRegistration(user: UserRegistration){
 
+        _registrationResponse.postValue(DataState.Loading())
 
         authService.userRegistration(user).addOnSuccessListener {
-            _registrationResponse.postValue(DataState.Success(user))
-            Log.d("TAG", "userRegistration: Success")
+            it.user?.let { createdUser->
+                user.userID = createdUser.uid
+
+                authService.createUser(user).addOnSuccessListener {
+                    _registrationResponse.postValue(DataState.Success(user))
+                    Log.d("TAG", "userRegistration: Success")
+
+                }.addOnFailureListener {error->
+
+                    _registrationResponse.postValue(DataState.Error("${error.message}"))
+                    Log.d("TAG", "userRegistration: ${error.message}")
+                }
+            }
+
+
+
         }.addOnFailureListener{error->
             _registrationResponse.postValue(DataState.Error("${error.message}"))
             Log.d("TAG", "userRegistration: ${error.message}")

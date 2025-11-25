@@ -1,6 +1,5 @@
 package com.example.ozzo.views.register
 
-
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.example.ozzo.base.BaseFragment
